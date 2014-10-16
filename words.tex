@@ -1,0 +1,28 @@
+% Requires:
+%		\usepackage{etoolbox}
+
+\newcommand{\MeasAlphabet}{\mathcal{X}}
+
+% Usage:
+%   \Words      ---> X^L
+%   \Words[L]   ---> X^L
+%   \Words[3]   ---> X^3
+\newcommand{\Words}[1][L]{\MeasAlphabet^{#1}}
+
+
+% Usage:
+%   \AllWords     --->   X^*
+%   \AllWords[*]  --->   X^*
+%   \AllWords[L]  --->   X^{\bar{L}}
+%   \AllWords[3]  --->   X^{\bar{3}}
+\newcommand{\AllWords}[1][]{%
+  \ifblank{#1}%
+    % #1 is blank:
+    {\MeasAlphabet^*}%
+    % #2 is not blank
+    {\ifstrequal{#1}{*}%
+      {\MeasAlphabet^*}% #1 is *
+%      {\MeasAlphabet^{\to #1}}% #1 is not *
+      {\MeasAlphabet^{\overline{#1}}}% #1 is not *
+    }%
+}
