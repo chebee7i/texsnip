@@ -1,0 +1,142 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{amsfonts}
+\usepackage{etoolbox}
+\usepackage{mathtools}
+\usepackage{showexpl}
+\usepackage{xcolor}
+\usepackage{xkeyval}
+
+\lstset{explpreset={
+  rframe={},
+  xleftmargin=.25in,
+  columns=flexible,
+  language={TeX},
+  basicstyle=\ttfamily,
+  backgroundcolor=\color{gray!30}
+}}
+
+\input{macros}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\begin{itemize}
+
+
+\item Proper argmin and argmax:
+\begin{LTXexample}[pos=b]
+\begin{align*}
+  &\arg\min_x (2x^2 - 3x + 5) \\
+  &\argmin_x (2x^2 - 3x + 5)
+\end{align*}
+\end{LTXexample}
+
+\item For summations with wide subscripts\ldots
+\begin{LTXexample}[pos=b]
+\begin{align*}
+  A &= \sum_{i, j \in B_{ij}} X_i^j\\
+  A &= \sum_{\mathclap{i, j \in B_{ij}}} X_i
+\end{align*}
+\end{LTXexample}
+
+\item When you want to center math within a box whose width is
+specified by other math.
+\begin{LTXexample}[pos=b]
+$aaabbbccc$\\
+$aaa\phantomword[c]{bbb}{Q}ccc$
+\end{LTXexample}
+
+\item A customizable vector symbol. Macros should use this.
+\begin{LTXexample}[pos=b]
+\CMvector[symbol=\leftarrow]{X} \quad
+\CMvector[symbol=\leftarrow, pre=\Large\textcolor{red}, ]{X} \quad
+\CMvector[symbol=\leftarrow, post=*]{X} \quad
+\CMvector[symbol=\leftarrow, raise=1.8]{X}
+\end{LTXexample}
+
+\item Although \verb+\leftharpoonup+ and \verb+\rightharpoonup+ exist, there
+is no left-right harpoon. Here is a customized version that combines the
+ones that do exist. The spacing is hardcoded and probably will only look good
+with certain fonts.
+\begin{LTXexample}[pos=b]
+$\leftharpoonup \: \leftrightharpoonup \: \rightharpoonup$
+\end{LTXexample}
+
+\item Convenience functions that use \verb+\CMvector+.
+\begin{LTXexample}[pos=b]
+\CMlarrow{X} \: \CMlrarrow{X} \: \CMrarrow{X} \\
+\CMlharpoon{X} \: \CMlrharpoon{X} \: \CMrharpoon{X} \\
+\end{LTXexample}
+
+\item A macro that defines specialized vector symbols that make use of Python index notation
+and has clean support for the vector direction, depending on what notation you want to use.
+\begin{LTXexample}[pos=b]
+\CMIndexedSymbol{MS}{X}
+\[\begin{matrix}
+\MS     & \MS[3]     & \MS[3][5]     & \MS[][5]     & \MS[5][]     \\
+\MS(<)  & \MS(<)[3]  & \MS(<)[3][5]  & \MS(<)[][5]  & \MS(<)[5][]  \\
+\MS(>)  & \MS(>)[3]  & \MS(>)[3][5]  & \MS(>)[][5]  & \MS(>)[5][]  \\
+\MS(<>) & \MS(<>)[3] & \MS(<>)[3][5] & \MS(<>)[][5] & \MS(<>)[5][] \\
+\end{matrix}\]
+
+\CMIndexedSymbol[arrow]{MS}{X}
+\[\begin{matrix}
+\MS     & \MS[3]     & \MS[3][5]     & \MS[][5]     & \MS[5][]     \\
+\MS(<)  & \MS(<)[3]  & \MS(<)[3][5]  & \MS(<)[][5]  & \MS(<)[5][]  \\
+\MS(>)  & \MS(>)[3]  & \MS(>)[3][5]  & \MS(>)[][5]  & \MS(>)[5][]  \\
+\MS(<>) & \MS(<>)[3] & \MS(<>)[3][5] & \MS(<>)[][5] & \MS(<>)[5][] \\
+\end{matrix}\]
+\end{LTXexample}
+
+\item Typically, you'll want to set up a few of these for regular use:
+\begin{LTXexample}[pos=b]
+% Put this in preamble somewhere
+\CMIndexedSymbol[harpoon]{MS}{X}
+\CMIndexedSymbol[harpoon]{ms}{x}
+\CMSuperIndexedSymbol[arrow]{FCS}{S}{+}
+
+% Some familiar commands
+\newcommand{\BiInfinity}{\MS(<>)}
+\newcommand{\biinfinity}{\ms(<>)}
+\newcommand{\Past}{\MS(<)}
+\newcommand{\past}{\ms(<)}
+\newcommand{\Future}{\MS(>)}
+\newcommand{\future}{\ms(>)}
+
+% Now we can use them
+\begin{displaymath}
+\begin{matrix}
+  \BiInfinity & \biinfinity & \Past & \past & \Future & \future \\
+  \FCS[0] & \FCS(>)[3] & \MS[0][3] & \past[3] & \MS(<>)[3] & \Future[3]
+\end{matrix}
+\end{displaymath}
+\end{LTXexample}
+
+\item Notation for single symbol, range of symbols. Two different options
+for semi-infinite sequences. If you might be using bi-infinite sequences,
+it is recommended you use the second option for semi-infinite sequences.
+\begin{LTXexample}[pos=b]
+\CMIndexedSymbol[harpoon]{MS}{X}
+\begin{align*}
+  \MS         &&& \text{symbol}\\
+  \MS[t]      &&& \text{symbol at time } t\\
+  \MS[-1][3]   &&& \MS[-1] \MS[0] \MS[1] \MS[2]\\
+  &&&\\
+  \MS[][3]    &&& \cdots \MS[0] \MS[1] \MS[2] \\
+  \MS[3][]    &&& \MS[3] \MS[4] \MS[5] \cdots\\
+  &&&\\
+  \MS(<)[3]   &&& \cdots \MS[0] \MS[1] \MS[2] \\
+  \MS(>)[3]   &&& \MS[3] \MS[4] \MS[5] \cdots\\
+  \MS(<>)[3]  &&& \MS(<)[3]\MS(>)[3]
+\end{align*}
+\end{LTXexample}
+
+
+
+
+
+\end{itemize}
+
+\end{document}
