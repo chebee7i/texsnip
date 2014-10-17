@@ -38,7 +38,7 @@ are only two that you will need:
 Each of these macros defines a macro \verb+\macroname+ that supports
 left, right, and leftright vector symbols and also provides Python-like
 indexing.  These commands can be used anywhere in the document, but typically,
-one should declare them just once them in the preamble. Valid arrowtypes are:
+one should declare them just once in the preamble. Valid arrowtypes are:
 \verb+arrow+ and \verb+harpoon+; the default value is \verb+harpoon+.
 The macro that is defined by this command supports the following syntax:
 \begin{center}
@@ -67,7 +67,7 @@ Suppose you plan on indexing both $X$ and $Y$, then you define both:
 \begin{LTXexample}[pos=b]
 \CMIndexedSymbol{MSi}{X} % input
 \CMIndexedSymbol{MSo}{Y} % output
-$\lim_{L \to \infty} I[ \MSi[0][L] : \MSo[0][L] ] \stackrel{?}{=} I[ \MSi(<)[t] : \MSi(>)[t]]$
+$\lim_{L \to \infty} I[ \MSi[0][L] : \MSo[0][L] ] \stackrel{?}{=} I[ \MSi(<)[t] : \MSo(>)[t]]$
 \end{LTXexample}
 
 It may also be helpful to freeze arrow directions to certain macro names:
@@ -86,8 +86,11 @@ It may also be helpful to freeze arrow directions to certain macro names:
 \end{align*}
 \end{LTXexample}
 
-That's pretty much it. The package defines a number of lower-level commands
-that might be of more general use. These are described now.
+That's pretty much it.\\
+
+The package defines a number of other lower-level
+commands that \emph{might} be of more general use, but probably not.
+These are described now.
 
 \begin{itemize}
 
