@@ -1,14 +1,12 @@
 \documentclass{article}
 
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=.5in]{geometry}
 
-\usepackage{amsfonts}
-\usepackage{etoolbox}
-\usepackage{mathtools}
+\usepackage{cmvec}
+
+% For demoing code
 \usepackage{showexpl}
 \usepackage{xcolor}
-\usepackage{xkeyval}
-
 \lstset{explpreset={
   rframe={},
   xleftmargin=.25in,
@@ -18,12 +16,80 @@
   backgroundcolor=\color{gray!30}
 }}
 
-\input{macros}
-
 \begin{document}
 \setlength{\parindent}{0pt}
-\begin{itemize}
 
+Make \verb+cmvec.sty+ available to your \LaTeX\
+installation. A simple way to do this is to copy \verb+cmvec.sty+ into
+the same directory as your source \LaTeX\ document. Then, add the following
+to your preamble:
+\begin{center}
+\verb+\usepackage{cmvec}+
+\end{center}
+
+The \texttt{cmvec} package provides a number of macros, but mostly, there
+are only two that you will need:
+
+\begin{enumerate}
+  \item \verb+\CMIndexedSymbol[arrowtype]{macroname}{symbol}+
+  \item \verb+\CMSuperIndexedSymbol[arrowtype]{macroname}{symbol}{superscript}+
+\end{enumerate}
+
+Each of these macros defines a macro \verb+\macroname+ that supports
+left, right, and leftright vector symbols and also provides Python-like
+indexing.  These commands can be used anywhere in the document, but typically,
+one should declare them just once them in the preamble. Valid arrowtypes are:
+\verb+arrow+ and \verb+harpoon+; the default value is \verb+harpoon+.
+The macro that is defined by this command supports the following syntax:
+\begin{center}
+\verb+\macroname(direction)[start][end]+
+\end{center}
+All three options \verb+(direction)+, \verb+[start]+ \verb+[end]+ are
+optional. Valid directions are \verb+<+, \verb+>+, \verb+<>+ for left, right,
+and leftright directions. This is best explained through example:
+
+\begin{LTXexample}[pos=b]
+% Define the indexed symbol
+\CMIndexedSymbol[harpoon]{MS}{X}
+
+% Now use it
+$\begin{matrix*}[l]
+\MS & \MS[0] & \MS[0][L] & \MS[][L] & \MS[L][]\\
+\MS(<) & \MS(>) & \MS(<>) & \MS(<)[0] & \MS(<>)[t]
+\end{matrix*}$
+\end{LTXexample}
+
+Note that practically one will choose to use the indexing notation (as in
+$X_{a:b}$) or the vector notation, but not both (with exception to adding a
+time index for a semi-infinite sequence).\\
+
+Suppose you plan on indexing both $X$ and $Y$, then you define both:
+\begin{LTXexample}[pos=b]
+\CMIndexedSymbol{MSi}{X} % input
+\CMIndexedSymbol{MSo}{Y} % output
+$\lim_{L \to \infty} I[ \MSi[0][L] : \MSo[0][L] ] \stackrel{?}{=} I[ \MSi(<)[t] : \MSi(>)[t]]$
+\end{LTXexample}
+
+It may also be helpful to freeze arrow directions to certain macro names:
+\begin{LTXexample}[pos=b]
+\CMIndexedSymbol{MS}{X}
+\CMIndexedSymbol{ms}{x}
+\newcommand{\Past}{\MS(<)}
+\newcommand{\past}{\ms(<)}
+\newcommand{\Future}{\MS(>)}
+\newcommand{\future}{\ms(>)}
+\begin{align*}
+\Past[0] &= \cdots \MS[-3] \MS[-2] \MS[-1] &
+\Future[0] &= \MS[0] \MS[1] \MS[2] \cdots \\
+\past[0] &= \cdots \ms[-3] \ms[-2] \ms[-1] &
+\future[0] &= \ms[0] \ms[1] \ms[2] \cdots \\
+\end{align*}
+\end{LTXexample}
+
+That's pretty much it. The package defines a number of lower-level commands
+that might be of more general use. These are described now.
+
+\begin{itemize}
 
 \item Proper argmin and argmax:
 \begin{LTXexample}[pos=b]
