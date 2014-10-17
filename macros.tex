@@ -1,0 +1,193 @@
+% Requires:
+%   \usepackage{etoolbox}
+%   \usepackage{mathtools}
+%   \usepackage{xkeyval}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+% Useful for seeing how TeX does its spacing and alignment.
+\newcommand{\texbox}[1]{{\setlength{\fboxsep}{0pt}\fbox{#1}}}
+
+
+% TUGboat, Volume 0 (2001), No. 0
+% http://math.arizona.edu/~aprl/publications/mathclap/perlis_mathclap_24Jun2003.pdf
+% For comparison, here are the existing overlap macros:
+% \def\llap#1{\hbox to 0pt{\hss#1}}
+% \def\rlap#1{\hbox to 0pt{#1\hss}}
+%
+% Not needed if you use \usepackage{mathtools}.
+%
+\def\clap#1{\hbox to 0pt{\hss#1\hss}}
+\def\mathllap{\mathpalette\mathllapinternal}
+\def\mathrlap{\mathpalette\mathrlapinternal}
+\def\mathclap{\mathpalette\mathclapinternal}
+\def\mathllapinternal#1#2{%
+\llap{$\mathsurround=0pt#1{#2}$}}
+\def\mathrlapinternal#1#2{%
+\rlap{$\mathsurround=0pt#1{#2}$}}
+\def\mathclapinternal#1#2{%
+\clap{$\mathsurround=0pt#1{#2}$}}
+
+
+% Usage:  \phantomword[c]{hiddenmath}{shownmath}
+%
+% The hidden text defines the box size.
+% The shown text is placed inside the box.
+% The optional argument is the alignment: l,c,r
+\MHInternalSyntaxOn
+% Using mathpalette requires more shuffling of arguments
+\providecommand*\phantomword[3][c]{%
+  \mathchoice
+  {\MT_phantom_word:NNnn #1\displaystyle {#2}{#3}}%
+  {\MT_phantom_word:NNnn #1\textstyle {#2}{#3}}%
+  {\MT_phantom_word:NNnn #1\scriptstyle {#2}{#3}}%
+  {\MT_phantom_word:NNnn #1\scriptscriptstyle {#2}{#3}}%
+}
+\def\MT_phantom_word:NNnn #1#2#3#4{%
+  \@begin@tempboxa\hbox{$\m@th#2#4$}%
+% can't use \settowidth as that also uses \@tempboxa...
+    \setlength\@tempdima{\widthof{$\m@th#2#3$}}%
+    \hbox{\hb@xt@\@tempdima{\csname bm@#1\endcsname}}%
+  \@end@tempboxa}
+\MHInternalSyntaxOff
+
+
+
+
+
+\makeatletter
+\newlength\CMlength
+\define@cmdkey[CM]{vector}[CM@@]{raise}{}
+\define@cmdkey[CM]{vector}[CM@@]{pre}{}
+\define@cmdkey[CM]{vector}[CM@@]{post}{}
+\define@cmdkey[CM]{vector}[CM@@]{symbol}{}
+\presetkeys[CM]{vector}{%
+  raise=1.02,%
+  pre={\scriptscriptstyle\,},%
+  post={}%
+}{}
+\newcommand{\CMvector}[2][]{%
+  \setkeys[CM]{vector}[]{#1}%
+  \settoheight{\CMlength}{\ensuremath{#2}}%
+  \setlength{\CMlength}{\CM@@raise\CMlength}%
+  \ensuremath{%
+    \mathrlap{\ensuremath{#2}}%
+    \smash{\phantomword[c]%
+      {\ensuremath{#2}}%
+      {\raise \CMlength \hbox{\ensuremath{\CM@@pre\CM@@symbol\CM@@post}}}%
+    }%
+  }%
+}
+\makeatother
+
+%%% Seems to give better spacing
+%%% If you change it, test against:
+%%%    $\CMlrharpoon{A}\CMlrharpoon{W}\CMlrharpoon{X}\CMlrharpoon{Y}\CMlrharpoon{Z}\CMlrharpoon{I}\CMlrharpoon{O}$
+\newcommand{\leftrightharpoonup}{\mathrlap{\leftharpoonup}\phantomword[l]{\,\leftharpoonup}{\,\rightharpoonup}}
+
+%% arrows
+\newcommand{\CMlarrow}[1]{\CMvector[symbol=\leftarrow]{#1}}
+\newcommand{\CMrarrow}[1]{\CMvector[symbol=\rightarrow]{#1}}
+\newcommand{\CMlrarrow}[1]{\CMvector[symbol=\leftrightarrow]{#1}}
+%% harpoons
+\newcommand{\CMlharpoon}[1]{\CMvector[symbol=\leftharpoonup,pre=\scriptscriptstyle]{#1}}
+\newcommand{\CMrharpoon}[1]{\CMvector[symbol=\rightharpoonup,pre=\scriptscriptstyle]{#1}}
+\newcommand{\CMlrharpoon}[1]{\CMvector[symbol=\leftrightharpoonup,pre=\scriptscriptstyle]{#1}}
+
+
+
+
+\makeatletter
+\def\BEsep{:}
+% \CMIndexedSymbol[type]{cmdname}{symbol}
+\newcommand{\CMIndexedSymbol}[3][harpoon]{%
+  \ifstrequal{#1}{arrow}
+    {% Arrows
+      \expandafter\let\csname Lobject#2\endcsname\CMlarrow
+      \expandafter\let\csname Robject#2\endcsname\CMrarrow
+      \expandafter\let\csname LRobject#2\endcsname\CMlrarrow
+    }
+    {
+      \expandafter\let\csname Lobject#2\endcsname\CMlharpoon
+      \expandafter\let\csname Robject#2\endcsname\CMrharpoon
+      \expandafter\let\csname LRobject#2\endcsname\CMlrharpoon
+    }
+  \protected\expandafter\def\csname #2\endcsname{%
+    \@ifnextchar(%)
+      {\csname #2@i\endcsname}
+      {\csname #2@i\endcsname()}%
+  }%
+  \expandafter\def\csname #2@i\endcsname(##1){%
+    % figure out what the main character should be
+    \ifstrequal{##1}{>}%
+      {\def\CMtemp{\csname Robject#2\endcsname{#3}}}% (>) --> right
+      {% false
+        \ifstrequal{##1}{<}%
+          {\def\CMtemp{\csname Lobject#2\endcsname{#3}}}% (<) --> left
+          {%
+            \ifstrequal{##1}{<>}%
+              {\def\CMtemp{\csname LRobject#2\endcsname{#3}}}% (<>) --> left,right
+              {\def\CMtemp{#3}}% () or anything else --> regular
+          }%
+      }%
+    \@ifnextchar[%]
+      {\csname #2@ii\endcsname(\CMtemp)}%
+      {\CMtemp}%                                   \cmdname
+  }%
+  \expandafter\def\csname #2@ii\endcsname(##1)[##2]{%
+    \@ifnextchar[%]
+      {\csname #2@iii\endcsname({##1})[{##2}]}%
+      {##1_{##2}}%                                  \cmdname[i]
+  }%
+  \expandafter\def\csname #2@iii\endcsname(##1)[##2][##3]{%
+    ##1_{##2\BEsep##3}%                                        \cmdname[i][j]
+  }%
+}
+
+% \CMSuperIndexedSymbol{cmdname}{symbol}{superscript}
+\newcommand{\CMSuperIndexedSymbol}[4][harpoon]{%
+  \ifstrequal{#1}{arrow}
+    {% Arrows
+      \expandafter\let\csname Lobject#2\endcsname\CMlarrow
+      \expandafter\let\csname Robject#2\endcsname\CMrarrow
+      \expandafter\let\csname LRobject#2\endcsname\CMlrarrow
+    }
+    {
+      \expandafter\let\csname Lobject#2\endcsname\CMlharpoon
+      \expandafter\let\csname Robject#2\endcsname\CMrharpoon
+      \expandafter\let\csname LRobject#2\endcsname\CMlrharpoon
+    }
+  \protected\expandafter\def\csname #2\endcsname{%
+    \@ifnextchar(%)
+      {\csname #2@i\endcsname}%
+      {\csname #2@i\endcsname()}%
+  }%
+  \expandafter\def\csname #2@i\endcsname(##1){%
+    % figure out what the main character should be
+    \ifstrequal{##1}{>}%
+      {\def\CMtemp{\csname Robject#2\endcsname{#3}}}% (>) --> right
+      {% false
+        \ifstrequal{##1}{<}%
+          {\def\CMtemp{\csname Lobject#2\endcsname{#3}}}% (<) --> left
+          {%
+            \ifstrequal{##1}{<>}%
+              {\def\CMtemp{\csname LRobject#2\endcsname{#3}}}% (<>) --> left,right
+              {\def\CMtemp{#3}}% () or anything else --> regular
+          }%
+      }%
+    \@ifnextchar[%]
+      {\csname #2@ii\endcsname(\CMtemp)}%
+      {\CMtemp^{#4}}%                                   \cmdname
+  }%
+  \expandafter\def\csname #2@ii\endcsname(##1)[##2]{%
+    \@ifnextchar[%]
+      {\csname #2@iii\endcsname({##1})[{##2}]}%
+      {##1_{##2}^{#4}}%                                  \cmdname[i]
+  }%
+  \expandafter\def\csname #2@iii\endcsname(##1)[##2][##3]{%
+    ##1_{##2\BEsep##3}^{#4}%                                        \cmdname[i][j]
+  }%
+}
+
+\makeatother
