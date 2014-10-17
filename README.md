@@ -3,10 +3,15 @@ texsnip
 
 TeX-related snippets.
 
-For most of these, you'll need:
+Usage:
 
 ```latex
-\usepackage{etoolbox}
-\usepackage{mathtools}
-\usepackage{xkeyval}
+\documentclass{article}
+\usepackage{cmvec}
+\CMIndexedSymbol{MS}{X}
+\begin{document}
+$\MS \: \MS[0] \: \MS[0][3] \: \MS[][3] \: \MS[0][] \: \MS(<) \: \MS(>)[0] \: \MS(<>)[0][3]$
+\end{document}
 ```
+
+Make sure your LaTeX installation is up-to-date. You will need `mathtools` and `etoolbox`.
