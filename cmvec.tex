@@ -2,18 +2,29 @@
 
 \usepackage[margin=.5in]{geometry}
 
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[scaled=0.82]{beramono}
+\usepackage{microtype}
+
 \usepackage{cmvec}
 
 % For demoing code
 \usepackage{showexpl}
 \usepackage{xcolor}
+% http://tex.stackexchange.com/questions/17646/fixed-width-font-with-ltxexample-environment
+\sbox0{\small\ttfamily A}
+\edef\mybasewidth{\the\wd0 }
 \lstset{explpreset={
   rframe={},
   xleftmargin=.25in,
   columns=flexible,
   language={TeX},
-  basicstyle=\ttfamily,
-  backgroundcolor=\color{gray!30}
+  basicstyle=\small\ttfamily,
+  columns=fixed,
+  basewidth=\mybasewidth,
+  backgroundcolor=\color{gray!30},
+  keywordstyle=\relax,
 }}
 
 \begin{document}
