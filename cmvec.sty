@@ -94,10 +94,14 @@
 }
 \makeatother
 
-%%% Seems to give better spacing
-%%% If you change it, test against:
-%%%    $\CMlrharpoon{A}\CMlrharpoon{W}\CMlrharpoon{X}\CMlrharpoon{Y}\CMlrharpoon{Z}\CMlrharpoon{I}\CMlrharpoon{O}$
-\newcommand{\leftrightharpoonup}{\mathrlap{\leftharpoonup}\phantomword[l]{\,\leftharpoonup}{\,\rightharpoonup}}
+\newcommand{\leftrightharpoonup}{%
+  \mathrel{\mathpalette\lrhup\relax}%
+}
+\makeatletter
+\newcommand{\lrhup}[2]{%
+  \ooalign{$\m@th#1\leftharpoonup$\cr$\m@th#1\rightharpoonup$\cr}%
+}
+\makeatother
 
 %% arrows
 \newcommand{\CMlarrow}[1]{\CMvector[symbol=\leftarrow]{#1}}
