@@ -7,7 +7,16 @@
 \usepackage[scaled=0.82]{beramono}
 \usepackage{microtype}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+
 \usepackage{cmvec}
+
+\usepackage{accents}
+\newcommand{\vect}[1]{\accentset{\leftharpoonup}{#1}}
+\newcommand{\vvect}[1]{\accentset{\xleftrightharpoonup{#1}}{#1}}
+\newcommand{\vvvect}[2][]{\accentset{\myarrow[#1]{#2}}{#2}}
 
 % For demoing code
 \usepackage{showexpl}
@@ -27,8 +36,176 @@
   keywordstyle=\relax,
 }}
 
+\def\showmeaning#1{\ttfamily\small\meaning#1}
+
+% Overline that accounts for italics.
+% http://tex.stackexchange.com/a/95084/6896
+\newcommand{\myol}[2][3]{{}\mkern#1mu\overline{\mkern-#1mu#2}}
+
+\newcommand{\myarrow}[2][]{%
+  \begin{tikzpicture}[baseline, inner sep=0pt, outer sep=0pt]%
+    \node[anchor=base] (arg) {$\hphantom{#2}$};%
+    \draw[-{Stealth[length=.7mm]}, shorten <= 1pt, shorten >= 0pt, #1]
+         (arg.west) -- (arg.east);%
+  \end{tikzpicture}%
+}
+
+\newcommand\xleftrightharpoonup[1]{%
+\begin{tikzpicture}[baseline=(arg.base), inner sep=0pt, outer sep=0pt]
+\node[anchor=base] (arg) {$#1$};
+\draw[-{Stealth[harpoon,swap,length=1mm]},shorten >= 0.5pt] (arg.north east) -- (arg.north west);
+\end{tikzpicture}%
+}
+
+\usepackage{blindtext}
+
+
+\def\makemacro#1#2#3{%
+  \def#1(##1){{\makemacroK{#3}^{\csname\ifx##1<left\else right\fi#2\endcsname}}}%
+}
+\def\makemacroA{\def\makemacroI{}\futurelet\next\makemacroB}
+\def\makemacroB{\ifx\next[\expandafter\makemacroC\fi}
+\def\makemacroC[#1]{\def\makemacroI{#1}\futurelet\next\makemacroD}
+\def\makemacroD{\ifx\next[\expandafter\makemacroE\else_{\makemacroI}\fi}
+\def\makemacroE[#1]{_{\makemacroI:#1}}
+\def\makemacroK#1{\mathop{%
+  \setbox0=\hbox{$#1_0$}\setbox2=\hbox{$#1\null_0$}%
+  #1\kern\wd0\kern-\wd2}\limits
+}
+
+\makemacro \Qaz {arrow}{Q}
+\makemacro \Qwe {harpoonup}{W}
+
+\CMIndexedSymbol{MS}{X}
+\CMIndexedSymbol{ms}{x}
+\CMIndexedSymbol{msf}{f}
+\CMIndexedSymbol{msd}{d}
+\CMIndexedSymbol{msh}{h}
+\CMIndexedSymbol{msi}{i}
+
+
+
 \begin{document}
 \setlength{\parindent}{0pt}
+$
+\CMrarrow{X} \: \CMrarrow{x} \:
+\CMrarrow{Y} \: \CMrarrow{y} \:
+\CMrarrow{Z} \: \CMrarrow{z} \:
+\CMxrarrow{X} \: \CMxrarrow{x} \:
+\CMxrarrow{Y} \: \CMxrarrow{y} \:
+\CMxrarrow{Z} \: \CMxrarrow{z}
+$ \\
+$
+\CMlarrow{X} \: \CMlarrow{x} \:
+\CMlarrow{Y} \: \CMlarrow{y} \:
+\CMlarrow{Z} \: \CMlarrow{z} \:
+\CMxlarrow{X} \: \CMxlarrow{x} \:
+\CMxlarrow{Y} \: \CMxlarrow{y} \:
+\CMxlarrow{Z} \: \CMxlarrow{z}
+$ \\
+$
+\CMlrarrow{X} \: \CMlrarrow{x} \:
+\CMlrarrow{Y} \: \CMlrarrow{y} \:
+\CMlrarrow{Z} \: \CMlrarrow{z} \:
+\CMxlrarrow{X} \: \CMxlrarrow{x} \:
+\CMxlrarrow{Y} \: \CMxlrarrow{y} \:
+\CMxlrarrow{Z} \: \CMxlrarrow{z}
+$ \\
+$
+\CMrharpoon{X} \: \CMrharpoon{x} \:
+\CMrharpoon{Y} \: \CMrharpoon{y} \:
+\CMrharpoon{Z} \: \CMrharpoon{z} \:
+\CMxrharpoon{X} \: \CMxrharpoon{x} \:
+\CMxrharpoon{Y} \: \CMxrharpoon{y} \:
+\CMxrharpoon{Z} \: \CMxrharpoon{z}
+$ \\
+$
+\CMlharpoon{X} \: \CMlharpoon{x} \:
+\CMlharpoon{Y} \: \CMlharpoon{y} \:
+\CMlharpoon{Z} \: \CMlharpoon{z} \:
+\CMxlharpoon{X} \: \CMxlharpoon{x} \:
+\CMxlharpoon{Y} \: \CMxlharpoon{y} \:
+\CMxlharpoon{Z} \: \CMxlharpoon{z}
+$ \\
+$
+\CMlrharpoon{X} \: \CMlrharpoon{x} \:
+\CMlrharpoon{Y} \: \CMlrharpoon{y} \:
+\CMlrharpoon{Z} \: \CMlrharpoon{z} \:
+\CMxlrharpoon{X} \: \CMxlrharpoon{x} \:
+\CMxlrharpoon{Y} \: \CMxlrharpoon{y} \:
+\CMxlrharpoon{Z} \: \CMxlrharpoon{z}
+$ \\
+
+
+
+
+
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+\myarrow{X}a$\xleftrightharpoonup{X} \CMxrarrow{Y} \vvvect{x}^+_{3:5} \vvvect{Y} \vvvect{A} \vvvect[shorten <= 3pt]{XY}$ XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+\\
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
+\\
+
+
+
+
+
+$\overline{A}\texbox{$a$}\texbox{$b$}\texbox{$c$}\texbox{{}}\texbox{$\mkern5mu\overline{\texbox{$X$}}$}\texbox{abc}$\\
+$\overline{A}\texbox{$a$}\texbox{$b$}\texbox{$c$}\texbox{{}}\texbox{$\mkern5mu\overline{\texbox{$\mkern-5muX$}}$}\texbox{abc}$\\
+$\overline{A}abc{}\mkern5mu\overline{\mkern-5mu X}abc$\\
+\texbox{$a$}\texbox{$b$}\texbox{$c$}\texbox{$\overline{\texbox{$X$}}$}\texbox{$a$}\texbox{$b$}\texbox{$c$} \\
+
+$abc\overline{X}abc$\\
+$      \Qwe(>),      % W with right-pointing harpoon
+ \quad \Qaz(<),      % Q with left-pointing arrow
+$ \\
+
+
+abc\tikz[baseline,inner sep=0pt, outer sep=0pt]{\node[anchor=base] {d};}efg
+
+DEMO: $\msf(>)[0][3]^3 \: \msd(>)[0][3]^3 \: \msh(>)[0][3]^3$\\
+
+$\xleftrightharpoonup{X} \qquad \xleftrightharpoonup{XY} \qquad
+\xleftrightharpoonup{x} \qquad \xleftrightharpoonup{i}$ \\
+
+\blindtext $\xleftrightharpoonup{X} \vvect{X}\ : \vvvect{X} \: \vect{X}\vect{X}\vect{X}\vect{X}\vect{X}\vect{X} \: \vect{x} \vect{y}$ \blindtext
+
+$\Qwe(<) \: \vect{W} \: \vect{WW} \: \vect{A} \: \vect{y} \: \vect{f} \: \vect{x} \quad \vect{X} \: \vect{i} \: \vect{I} \: \overrightarrow{X}$
+
+\makeatletter
+
+\begin{LTXexample}[pos=b]
+\ttfamily\small\meaning\overrightarrow
+\end{LTXexample}
+
+
+\begin{LTXexample}[pos=b]
+\makeatletter
+\ttfamily\small\meaning\overarrow@
+\makeatother
+\end{LTXexample}
+
+\begin{LTXexample}[pos=b]
+\makeatletter
+\ttfamily\small\meaning\rightarrowfill@
+\makeatother
+\end{LTXexample}
+
+\begin{LTXexample}[pos=b]
+\makeatletter
+\ttfamily\small\meaning\arrowfill@
+\makeatother
+\end{LTXexample}
+
 
 Make \verb+cmvec.sty+ available to your \LaTeX\
 installation. A simple way to do this is to copy \verb+cmvec.sty+ into
