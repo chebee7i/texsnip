@@ -14,4 +14,4 @@ $\MS \: \MS[0] \: \MS[0][3] \: \MS[][3] \: \MS[0][] \: \MS(<) \: \MS(>)[0] \: \M
 \end{document}
 ```
 
-Make sure your LaTeX installation is up-to-date. You will need `mathtools` and `etoolbox`.
+Make sure your LaTeX installation is up-to-date. You will need `etoolbox`, `mathtools`, and `tikz`.
