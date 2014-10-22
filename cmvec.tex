@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\usepackage[margin=.5in]{geometry}
+\usepackage[margin=.4in]{geometry}
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -12,11 +12,6 @@
 \usetikzlibrary{arrows.meta}
 
 \usepackage{cmvec}
-
-\usepackage{accents}
-\newcommand{\vect}[1]{\accentset{\leftharpoonup}{#1}}
-\newcommand{\vvect}[1]{\accentset{\xleftrightharpoonup{#1}}{#1}}
-\newcommand{\vvvect}[2][]{\accentset{\myarrow[#1]{#2}}{#2}}
 
 % For demoing code
 \usepackage{showexpl}
@@ -36,176 +31,21 @@
   keywordstyle=\relax,
 }}
 
-\def\showmeaning#1{\ttfamily\small\meaning#1}
-
-% Overline that accounts for italics.
-% http://tex.stackexchange.com/a/95084/6896
-\newcommand{\myol}[2][3]{{}\mkern#1mu\overline{\mkern-#1mu#2}}
-
-\newcommand{\myarrow}[2][]{%
-  \begin{tikzpicture}[baseline, inner sep=0pt, outer sep=0pt]%
-    \node[anchor=base] (arg) {$\hphantom{#2}$};%
-    \draw[-{Stealth[length=.7mm]}, shorten <= 1pt, shorten >= 0pt, #1]
-         (arg.west) -- (arg.east);%
-  \end{tikzpicture}%
-}
-
-\newcommand\xleftrightharpoonup[1]{%
-\begin{tikzpicture}[baseline=(arg.base), inner sep=0pt, outer sep=0pt]
-\node[anchor=base] (arg) {$#1$};
-\draw[-{Stealth[harpoon,swap,length=1mm]},shorten >= 0.5pt] (arg.north east) -- (arg.north west);
-\end{tikzpicture}%
-}
-
 \usepackage{blindtext}
 
+%\CMIndexedSymbol{MS}{X}
+%\CMIndexedSymbol{ms}{x}
 
-\def\makemacro#1#2#3{%
-  \def#1(##1){{\makemacroK{#3}^{\csname\ifx##1<left\else right\fi#2\endcsname}}}%
-}
-\def\makemacroA{\def\makemacroI{}\futurelet\next\makemacroB}
-\def\makemacroB{\ifx\next[\expandafter\makemacroC\fi}
-\def\makemacroC[#1]{\def\makemacroI{#1}\futurelet\next\makemacroD}
-\def\makemacroD{\ifx\next[\expandafter\makemacroE\else_{\makemacroI}\fi}
-\def\makemacroE[#1]{_{\makemacroI:#1}}
-\def\makemacroK#1{\mathop{%
-  \setbox0=\hbox{$#1_0$}\setbox2=\hbox{$#1\null_0$}%
-  #1\kern\wd0\kern-\wd2}\limits
-}
+\pagestyle{empty}
 
-\makemacro \Qaz {arrow}{Q}
-\makemacro \Qwe {harpoonup}{W}
 
 \CMIndexedSymbol{MS}{X}
 \CMIndexedSymbol{ms}{x}
-\CMIndexedSymbol{msf}{f}
-\CMIndexedSymbol{msd}{d}
-\CMIndexedSymbol{msh}{h}
-\CMIndexedSymbol{msi}{i}
-
-
 
 \begin{document}
+
+
 \setlength{\parindent}{0pt}
-$
-\CMrarrow{X} \: \CMrarrow{x} \:
-\CMrarrow{Y} \: \CMrarrow{y} \:
-\CMrarrow{Z} \: \CMrarrow{z} \:
-\CMxrarrow{X} \: \CMxrarrow{x} \:
-\CMxrarrow{Y} \: \CMxrarrow{y} \:
-\CMxrarrow{Z} \: \CMxrarrow{z}
-$ \\
-$
-\CMlarrow{X} \: \CMlarrow{x} \:
-\CMlarrow{Y} \: \CMlarrow{y} \:
-\CMlarrow{Z} \: \CMlarrow{z} \:
-\CMxlarrow{X} \: \CMxlarrow{x} \:
-\CMxlarrow{Y} \: \CMxlarrow{y} \:
-\CMxlarrow{Z} \: \CMxlarrow{z}
-$ \\
-$
-\CMlrarrow{X} \: \CMlrarrow{x} \:
-\CMlrarrow{Y} \: \CMlrarrow{y} \:
-\CMlrarrow{Z} \: \CMlrarrow{z} \:
-\CMxlrarrow{X} \: \CMxlrarrow{x} \:
-\CMxlrarrow{Y} \: \CMxlrarrow{y} \:
-\CMxlrarrow{Z} \: \CMxlrarrow{z}
-$ \\
-$
-\CMrharpoon{X} \: \CMrharpoon{x} \:
-\CMrharpoon{Y} \: \CMrharpoon{y} \:
-\CMrharpoon{Z} \: \CMrharpoon{z} \:
-\CMxrharpoon{X} \: \CMxrharpoon{x} \:
-\CMxrharpoon{Y} \: \CMxrharpoon{y} \:
-\CMxrharpoon{Z} \: \CMxrharpoon{z}
-$ \\
-$
-\CMlharpoon{X} \: \CMlharpoon{x} \:
-\CMlharpoon{Y} \: \CMlharpoon{y} \:
-\CMlharpoon{Z} \: \CMlharpoon{z} \:
-\CMxlharpoon{X} \: \CMxlharpoon{x} \:
-\CMxlharpoon{Y} \: \CMxlharpoon{y} \:
-\CMxlharpoon{Z} \: \CMxlharpoon{z}
-$ \\
-$
-\CMlrharpoon{X} \: \CMlrharpoon{x} \:
-\CMlrharpoon{Y} \: \CMlrharpoon{y} \:
-\CMlrharpoon{Z} \: \CMlrharpoon{z} \:
-\CMxlrharpoon{X} \: \CMxlrharpoon{x} \:
-\CMxlrharpoon{Y} \: \CMxlrharpoon{y} \:
-\CMxlrharpoon{Z} \: \CMxlrharpoon{z}
-$ \\
-
-
-
-
-
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-\myarrow{X}a$\xleftrightharpoonup{X} \CMxrarrow{Y} \vvvect{x}^+_{3:5} \vvvect{Y} \vvvect{A} \vvvect[shorten <= 3pt]{XY}$ XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-\\
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy
-\\
-
-
-
-
-
-$\overline{A}\texbox{$a$}\texbox{$b$}\texbox{$c$}\texbox{{}}\texbox{$\mkern5mu\overline{\texbox{$X$}}$}\texbox{abc}$\\
-$\overline{A}\texbox{$a$}\texbox{$b$}\texbox{$c$}\texbox{{}}\texbox{$\mkern5mu\overline{\texbox{$\mkern-5muX$}}$}\texbox{abc}$\\
-$\overline{A}abc{}\mkern5mu\overline{\mkern-5mu X}abc$\\
-\texbox{$a$}\texbox{$b$}\texbox{$c$}\texbox{$\overline{\texbox{$X$}}$}\texbox{$a$}\texbox{$b$}\texbox{$c$} \\
-
-$abc\overline{X}abc$\\
-$      \Qwe(>),      % W with right-pointing harpoon
- \quad \Qaz(<),      % Q with left-pointing arrow
-$ \\
-
-
-abc\tikz[baseline,inner sep=0pt, outer sep=0pt]{\node[anchor=base] {d};}efg
-
-DEMO: $\msf(>)[0][3]^3 \: \msd(>)[0][3]^3 \: \msh(>)[0][3]^3$\\
-
-$\xleftrightharpoonup{X} \qquad \xleftrightharpoonup{XY} \qquad
-\xleftrightharpoonup{x} \qquad \xleftrightharpoonup{i}$ \\
-
-\blindtext $\xleftrightharpoonup{X} \vvect{X}\ : \vvvect{X} \: \vect{X}\vect{X}\vect{X}\vect{X}\vect{X}\vect{X} \: \vect{x} \vect{y}$ \blindtext
-
-$\Qwe(<) \: \vect{W} \: \vect{WW} \: \vect{A} \: \vect{y} \: \vect{f} \: \vect{x} \quad \vect{X} \: \vect{i} \: \vect{I} \: \overrightarrow{X}$
-
-\makeatletter
-
-\begin{LTXexample}[pos=b]
-\ttfamily\small\meaning\overrightarrow
-\end{LTXexample}
-
-
-\begin{LTXexample}[pos=b]
-\makeatletter
-\ttfamily\small\meaning\overarrow@
-\makeatother
-\end{LTXexample}
-
-\begin{LTXexample}[pos=b]
-\makeatletter
-\ttfamily\small\meaning\rightarrowfill@
-\makeatother
-\end{LTXexample}
-
-\begin{LTXexample}[pos=b]
-\makeatletter
-\ttfamily\small\meaning\arrowfill@
-\makeatother
-\end{LTXexample}
-
 
 Make \verb+cmvec.sty+ available to your \LaTeX\
 installation. A simple way to do this is to copy \verb+cmvec.sty+ into
@@ -215,26 +55,43 @@ to your preamble:
 \verb+\usepackage{cmvec}+
 \end{center}
 
-The \texttt{cmvec} package provides a number of macros, but mostly, there
-are only two that you will need:
+The \verb+cmvec+ package requires a recent \LaTeX\ distribution. \verb+TikZ+
+must be version 3.0.0 or higher (which came out in 2013/12). The implementation
+is a dirty hack. The goal is to provide uniform way to annotate symbols with
+vector marks and also provide convenient subscripting. The solutions here are
+\emph{not} nicely implemented and will not be robust to different fonts, etc.
+
+Unfortunately, there are still many hurdles to an arbitrary, extensible
+accenting library on characters. So this package currently has two separate
+implementations. The first is a pure-\LaTeX\ hack that does not provide
+extensible. The second is a \verb+TikZ+-based solution. Both are provided
+through the same API. Here are the macros that you'll need:
 
 \begin{enumerate}
-  \item \verb+\CMIndexedSymbol[arrowtype]{macroname}{symbol}+
-  \item \verb+\CMSuperIndexedSymbol[arrowtype]{macroname}{symbol}{superscript}+
+  \item \verb+\CMIndexedSymbol[options]{macroname}{symbol}+
+  \item \verb+\CMSuperIndexedSymbol[options]{macroname}{symbol}{superscript}+
 \end{enumerate}
 
 Each of these macros defines a macro \verb+\macroname+ that supports
 left, right, and leftright vector symbols and also provides Python-like
 indexing.  These commands can be used anywhere in the document, but typically,
-one should declare them just once in the preamble. Valid arrowtypes are:
-\verb+arrow+ and \verb+harpoon+; the default value is \verb+harpoon+.
-The macro that is defined by this command supports the following syntax:
+one should declare them just once in the preamble. The \verb+options+ argument
+should be a valid arrow type:
+\verb+arrow+, \verb+harpoon+, \verb+xarrow+, and \verb+xharpoon+; the default
+value is \verb+xharpoon+. The \verb+x+ variants represent extensible vector
+symbols, and for these variants only, one can additionally pass in a \verb+style=+
+parameter along with the arrow type to customize how the arrow is drawn. This
+can be used to customize the shortening and arrow size. The macro that is
+created by this command supports
+the following syntax:
+
 \begin{center}
 \verb+\macroname(direction)[start][end]+
 \end{center}
-All three options \verb+(direction)+, \verb+[start]+ \verb+[end]+ are
-optional. Valid directions are \verb+<+, \verb+>+, \verb+<>+ for left, right,
-and leftright directions. This is best explained through example:
+
+Each argument \verb+(direction)+, \verb+[start]+ \verb+[end]+ is
+optional. Valid directions are \verb+<+, \verb+>+, and \verb+<>+ for left, right,
+and leftright directions, respectively. This is best explained through example:
 
 \begin{LTXexample}[pos=b]
 % Define the indexed symbol
@@ -242,21 +99,100 @@ and leftright directions. This is best explained through example:
 
 % Now use it
 $\begin{matrix*}[l]
-\MS & \MS[0] & \MS[0][L] & \MS[][L] & \MS[L][]\\
-\MS(<) & \MS(>) & \MS(<>) & \MS(<)[0] & \MS(<>)[t]
+  \MS & \MS[0] & \MS[0][L] & \MS[][L] & \MS[L][]\\
+  \MS(<) & \MS(>) & \MS(<>) & \MS(<)[0] & \MS(<>)[t]
 \end{matrix*}$
 \end{LTXexample}
 
-Note that practically one will choose to use the indexing notation (as in
-$X_{a:b}$) or the vector notation, but not both (with exception to adding a
-time index for a semi-infinite sequence).\\
+Below are demonstrations of each arrow type. Because of the differing
+implementations, the extensible arrows do not look like the non-extensible
+arrows.\\
+
+\begin{tabular}{rcrc}
+\verb+arrow+
+&
+\CMIndexedSymbol[arrow]{MS}{X}\CMIndexedSymbol[arrow]{MSXX}{XX}
+\CMIndexedSymbol[arrow]{ms}{x}\CMIndexedSymbol[arrow]{msXX}{xx}
+$\begin{matrix}
+\MS     & \MS[3]     & \MS[3][5]     & \MS[][5]     & \MS[5][]     & \MSXX[0]\\
+\MS(<)  & \MS(<)[3]  & \MS(<)[3][5]  & \MS(<)[][5]  & \MS(<)[5][]  & \MSXX(<)[0]\\
+\MS(>)  & \MS(>)[3]  & \MS(>)[3][5]  & \MS(>)[][5]  & \MS(>)[5][]  & \MSXX(>)[0]\\
+\MS(<>) & \MS(<>)[3] & \MS(<>)[3][5] & \MS(<>)[][5] & \MS(<>)[5][] & \MSXX(<>)[0]\\
+\ms     & \ms[3]     & \ms[3][5]     & \ms[][5]     & \ms[5][]     & \msXX[0]\\
+\ms(<)  & \ms(<)[3]  & \ms(<)[3][5]  & \ms(<)[][5]  & \ms(<)[5][]  & \msXX(<)[0]\\
+\ms(>)  & \ms(>)[3]  & \ms(>)[3][5]  & \ms(>)[][5]  & \ms(>)[5][]  & \msXX(>)[0]\\
+\ms(<>) & \ms(<>)[3] & \ms(<>)[3][5] & \ms(<>)[][5] & \ms(<>)[5][] & \msXX(<>)[0]\\
+\end{matrix}$
+&
+\verb+harpoon+
+&
+\CMIndexedSymbol[harpoon]{MS}{X}\CMIndexedSymbol[harpoon]{MSXX}{XX}
+\CMIndexedSymbol[harpoon]{ms}{x}\CMIndexedSymbol[harpoon]{msXX}{xx}
+$\begin{matrix}
+\MS     & \MS[3]     & \MS[3][5]     & \MS[][5]     & \MS[5][]     & \MSXX[0]\\
+\MS(<)  & \MS(<)[3]  & \MS(<)[3][5]  & \MS(<)[][5]  & \MS(<)[5][]  & \MSXX(<)[0]\\
+\MS(>)  & \MS(>)[3]  & \MS(>)[3][5]  & \MS(>)[][5]  & \MS(>)[5][]  & \MSXX(>)[0]\\
+\MS(<>) & \MS(<>)[3] & \MS(<>)[3][5] & \MS(<>)[][5] & \MS(<>)[5][] & \MSXX(<>)[0]\\
+\ms     & \ms[3]     & \ms[3][5]     & \ms[][5]     & \ms[5][]     & \msXX[0]\\
+\ms(<)  & \ms(<)[3]  & \ms(<)[3][5]  & \ms(<)[][5]  & \ms(<)[5][]  & \msXX(<)[0]\\
+\ms(>)  & \ms(>)[3]  & \ms(>)[3][5]  & \ms(>)[][5]  & \ms(>)[5][]  & \msXX(>)[0]\\
+\ms(<>) & \ms(<>)[3] & \ms(<>)[3][5] & \ms(<>)[][5] & \ms(<>)[5][] & \msXX(<>)[0]\\
+\end{matrix}$\\
+&&&\\
+\verb+xarrow+
+&
+\CMIndexedSymbol[xarrow]{MS}{X}\CMIndexedSymbol[xarrow]{MSXX}{XX}
+\CMIndexedSymbol[xarrow]{ms}{x}\CMIndexedSymbol[xarrow]{msXX}{xx}
+$\begin{matrix}
+\MS     & \MS[3]     & \MS[3][5]     & \MS[][5]     & \MS[5][]     & \MSXX[0]\\
+\MS(<)  & \MS(<)[3]  & \MS(<)[3][5]  & \MS(<)[][5]  & \MS(<)[5][]  & \MSXX(<)[0]\\
+\MS(>)  & \MS(>)[3]  & \MS(>)[3][5]  & \MS(>)[][5]  & \MS(>)[5][]  & \MSXX(>)[0]\\
+\MS(<>) & \MS(<>)[3] & \MS(<>)[3][5] & \MS(<>)[][5] & \MS(<>)[5][] & \MSXX(<>)[0]\\
+\ms     & \ms[3]     & \ms[3][5]     & \ms[][5]     & \ms[5][]     & \msXX[0]\\
+\ms(<)  & \ms(<)[3]  & \ms(<)[3][5]  & \ms(<)[][5]  & \ms(<)[5][]  & \msXX(<)[0]\\
+\ms(>)  & \ms(>)[3]  & \ms(>)[3][5]  & \ms(>)[][5]  & \ms(>)[5][]  & \msXX(>)[0]\\
+\ms(<>) & \ms(<>)[3] & \ms(<>)[3][5] & \ms(<>)[][5] & \ms(<>)[5][] & \msXX(<>)[0]\\
+\end{matrix}$
+&
+\verb+xharpoon+
+&
+\CMIndexedSymbol[xharpoon]{MS}{X}\CMIndexedSymbol[xharpoon]{MSXX}{XX}
+\CMIndexedSymbol[xharpoon]{ms}{x}\CMIndexedSymbol[xharpoon]{msXX}{xx}
+$\begin{matrix}
+  \MS     & \MS[3]     & \MS[3][5]     & \MS[][5]     & \MS[5][]     & \MSXX[0]\\
+  \MS(<)  & \MS(<)[3]  & \MS(<)[3][5]  & \MS(<)[][5]  & \MS(<)[5][]  & \MSXX(<)[0]\\
+  \MS(>)  & \MS(>)[3]  & \MS(>)[3][5]  & \MS(>)[][5]  & \MS(>)[5][]  & \MSXX(>)[0]\\
+  \MS(<>) & \MS(<>)[3] & \MS(<>)[3][5] & \MS(<>)[][5] & \MS(<>)[5][] & \MSXX(<>)[0]\\
+  \ms     & \ms[3]     & \ms[3][5]     & \ms[][5]     & \ms[5][]     & \msXX[0]\\
+  \ms(<)  & \ms(<)[3]  & \ms(<)[3][5]  & \ms(<)[][5]  & \ms(<)[5][]  & \msXX(<)[0]\\
+  \ms(>)  & \ms(>)[3]  & \ms(>)[3][5]  & \ms(>)[][5]  & \ms(>)[5][]  & \msXX(>)[0]\\
+  \ms(<>) & \ms(<>)[3] & \ms(<>)[3][5] & \ms(<>)[][5] & \ms(<>)[5][] & \msXX(<>)[0]\\
+\end{matrix}$
+\end{tabular}\\
+
+Note that typically one will not use both vector symbols and double indexing.
+That is, it makes no sense to write $\MS(<)[0][3]$ since you might as well have
+written $\MS[0][3]$.  On the other hand, it can make sense to use both
+notations for realizations of random vectors---suppose you want to take elements $0$ to $3$ from
+a specific semi-infinite future: $\ms(>)[0][3]$.\\
+
+Here an inline demonstration. Note that interline spacing is legible.\\
+
+$XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy$\\
+$XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy$\\
+$XyXyXyXyXyXyXyXyXyXyXyXyXyXyXy%
+\MS(<) \, \MS(>) \, \MS(<>) \, \MS[0][3] \, \MS(<)[5]%
+XyXyXyXyXyXyXyXyXy$
+\\
+$XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy$\\
+$XyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXyXy$\\[.2in]
 
 Suppose you plan on indexing both $X$ and $Y$, then you define both:
 \begin{LTXexample}[pos=b]
 \CMIndexedSymbol{MSi}{X} % input
 \CMIndexedSymbol{MSo}{Y} % output
 $\lim_{L \to \infty} I[ \MSi[0][L] : \MSo[0][L] ] \stackrel{?}{=} I[ \MSi(<)[t] : \MSo(>)[t]]$
-\end{LTXexample}
+\end{LTXexample}\vspace{.1in}
 
 It may also be helpful to freeze arrow directions to certain macro names:
 \begin{LTXexample}[pos=b]
@@ -267,14 +203,34 @@ It may also be helpful to freeze arrow directions to certain macro names:
 \newcommand{\Future}{\MS(>)}
 \newcommand{\future}{\ms(>)}
 \begin{align*}
-\Past[0] &= \cdots \MS[-3] \MS[-2] \MS[-1] &
-\Future[0] &= \MS[0] \MS[1] \MS[2] \cdots \\
-\past[0] &= \cdots \ms[-3] \ms[-2] \ms[-1] &
-\future[0] &= \ms[0] \ms[1] \ms[2] \cdots \\
+  \Past[0]   &= \cdots \MS[-3] \MS[-2] \MS[-1] &
+  \Future[0] &= \MS[0] \MS[1]  \MS[2]  \cdots \\
+  \past[0]   &= \cdots \ms[-3] \ms[-2] \ms[-1] &
+  \future[0] &= \ms[0] \ms[1]  \ms[2]  \cdots \\
 \end{align*}
 \end{LTXexample}
 
+For the extensible varieties, you can customize the shortening and arrowhead
+at macro definition time as follows:
+\begin{LTXexample}[pos=b]
+\CMIndexedSymbol[xharpoon, style=red]{msia}{i}
+\CMIndexedSymbol[xharpoon, style=red]{msib}{\,i\,}
+\CMIndexedSymbol[xarrow, style={-{>[length=1mm]}, shorten <=0pt, shorten >=0pt, green}]{msic}{i}
+\CMIndexedSymbol[harpoon]{msid}{i}
+$\msia(<>) \: \msib(<>) \: \msic(<>) \: \msid(<>)$
+\end{LTXexample}
+
+
+This is sometimes necessary since the length of the arrows is created with
+\verb+TikZ+, which does not account for font skewness.
+
+
+
 That's pretty much it.\\
+
+
+
+\newpage
 
 The package defines a number of other lower-level
 commands that \emph{might} be of more general use, but probably not.

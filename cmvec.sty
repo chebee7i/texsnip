@@ -11,6 +11,26 @@
 \RequirePackage{accents}
 \RequirePackage{tikz}
 \usetikzlibrary{arrows.meta}
+\makeatletter
+\@ifpackagelater{tikz}{2013/12/01}{% 2013/12/20 is official release date
+    \relax
+}{%
+    \PackageError{cmvec}{Package TikZ/PGF is too old. Needs version: 3.0.0}%
+}
+\makeatother
+
+\def\showmeaning#1{\ttfamily\small\meaning#1}
+
+% http://tex.stackexchange.com/a/28791/6896
+\newcommand{\dif}[1][]{\mathop{}\!\mathrm{d}
+  \if\relax\detokenize{#1}\relax
+  \else
+    ^{#1}\mkern-1.5mu
+  \fi}
+
+% Overline that accounts for italics.
+% http://tex.stackexchange.com/a/95084/6896
+\newcommand{\myoverline}[2][3]{{}\mkern#1mu\overline{\mkern-#1mu#2}}
 
 \ifcsname argmin\endcsname%
   \relax
@@ -115,7 +135,7 @@
   \begin{tikzpicture}[baseline, inner sep=0pt, outer sep=0pt]
     \node[anchor=base] (arg) {$\hphantom{#2}$};
     \draw[#1] (arg.west) -- (arg.east);
-  \end{tikzpicture}%
+  \end{tikzpicture}\ignorespaces%
 }
 \newcommand{\CMxvector}[2][]{%
   \accentset{\CMxvectorx[#1]{#2}}{#2}
@@ -139,13 +159,13 @@
 
 %% extensible arrows and harpoons
 \newcommand{\CMxlarrow}[2][]{%
-  \CMxvector[{Stealth[length=.5mm]}-, shorten <= 1pt, shorten >= 1pt, #1]{#2}
+  \CMxvector[{Stealth[length=.8mm]}-, shorten <= 1pt, shorten >= 0pt, #1]{#2}
 }
 \newcommand{\CMxrarrow}[2][]{%
-  \CMxvector[-{Stealth[length=.5mm]}, shorten <= 1pt, shorten >= 1pt, #1]{#2}
+  \CMxvector[-{Stealth[length=.6mm]}, shorten <= 1pt, shorten >= 0pt, #1]{#2}
 }
 \newcommand{\CMxlrarrow}[2][]{%
-  \CMxvector[{Stealth[length=.5mm]}-{Stealth[length=.5mm]}, shorten <= 1pt, shorten >= 1pt, #1]{#2}
+  \CMxvector[{Stealth[length=.6mm]}-{Stealth[length=.6mm]}, shorten <= 1pt, shorten >= 0pt, #1]{#2}
 }
 \newcommand{\CMxlharpoon}[2][]{%
   \CMxvector[{<[harpoon,swap,length=.4mm]}-, shorten <= 1pt, shorten >= 1pt, #1]{#2}
@@ -159,65 +179,91 @@
 
 \makeatletter
 \def\BEsep{:}
-% \CMIndexedSymbol[type]{cmdname}{symbol}
-\newcommand{\CMIndexedSymbol}[3][harpoon]{%
 
+
+\pgfqkeys{/cmvector}{%
+  arrow/.style={vectortype=arrow},
+  harpoon/.style={vectortype=harpoon},
+  xarrow/.style={vectortype=xarrow},
+  xharpoon/.style={vectortype=xharpoon},
+  %style/.style = {/cmvector/savedstyle/.estyle={##1}}, % ##1 surprised me!
+  style/.store in=\CM@vectorstyle, % ##1 surprised me!
+  vectortype/.store in=\CM@vectortype,
+  vectortype=xharpoon,
+  style=,
+}
+
+
+% Creates CM@temp using expanded
+% 1: macroname, 2: style, 3: symbol
+\def\makeCM@temp#1#2#3{%
+  \edef\CM@temp{%
+      \noexpand\csname#1\noexpand\endcsname[#2]{#3}%
+  }%
+}
+
+% \CMIndexedSymbol[vector type and style]{cmdname}{symbol}
+\newcommand{\CMIndexedSymbol}[3][xharpoon]{%
+  \pgfqkeys{/cmvector}{vectortype=xharpoon,style={}}%
+  \pgfqkeys{/cmvector}{#1}%
+  % Save arguments for use inside \edefs
+  \def\CM@macroname{#2}%
+  \def\CM@symbol{#3}%
   % Default vectors.
-  \expandafter\let\csname Lobject#2\endcsname\CMxlharpoon
-  \expandafter\let\csname Robject#2\endcsname\CMxrharpoon
-  \expandafter\let\csname LRobject#2\endcsname\CMxlrharpoon
-  \ifstrequal{#1}{arrow}
+  \expandafter\let\csname Lobject#2\endcsname\CMxlharpoon%
+  \expandafter\let\csname Robject#2\endcsname\CMxrharpoon%
+  \expandafter\let\csname LRobject#2\endcsname\CMxlrharpoon%
+  % http://tex.stackexchange.com/a/24924
+  \edef\CM@temp{{\CM@vectortype}}%
+  \expandafter\ifstrequal\CM@temp{arrow}
     {% Arrows
-      \expandafter\let\csname Lobject#2\endcsname\CMlarrow
-      \expandafter\let\csname Robject#2\endcsname\CMrarrow
-      \expandafter\let\csname LRobject#2\endcsname\CMlrarrow
+      \expandafter\let\csname Lobject#2\endcsname\CMlarrow%
+      \expandafter\let\csname Robject#2\endcsname\CMrarrow%
+      \expandafter\let\csname LRobject#2\endcsname\CMlrarrow%
     }{}%
-  \ifstrequal{#1}{harpoon}
-    {
-      \expandafter\let\csname Lobject#2\endcsname\CMlharpoon
-      \expandafter\let\csname Robject#2\endcsname\CMrharpoon
-      \expandafter\let\csname LRobject#2\endcsname\CMlrharpoon
+  \expandafter\ifstrequal\CM@temp{harpoon}
+    {%
+      \expandafter\let\csname Lobject#2\endcsname\CMlharpoon%
+      \expandafter\let\csname Robject#2\endcsname\CMrharpoon%
+      \expandafter\let\csname LRobject#2\endcsname\CMlrharpoon%
     }{}%
-  \ifstrequal{#1}{xarrow}
+  \expandafter\ifstrequal\CM@temp{xarrow}
     {% Arrows
-      \expandafter\let\csname Lobject#2\endcsname\CMxlarrow
-      \expandafter\let\csname Robject#2\endcsname\CMxrarrow
-      \expandafter\let\csname LRobject#2\endcsname\CMxlrarrow
+      \expandafter\let\csname Lobject#2\endcsname\CMxlarrow%
+      \expandafter\let\csname Robject#2\endcsname\CMxrarrow%
+      \expandafter\let\csname LRobject#2\endcsname\CMxlrarrow%
     }{}%
-  \ifstrequal{#1}{xharpoon}
-    {
-      \expandafter\let\csname Lobject#2\endcsname\CMxlharpoon
-      \expandafter\let\csname Robject#2\endcsname\CMxrharpoon
-      \expandafter\let\csname LRobject#2\endcsname\CMxlrharpoon
+  \expandafter\ifstrequal\CM@temp{xharpoon}
+    {%
+      \expandafter\let\csname Lobject#2\endcsname\CMxlharpoon%
+      \expandafter\let\csname Robject#2\endcsname\CMxrharpoon%
+      \expandafter\let\csname LRobject#2\endcsname\CMxlrharpoon%
     }{}%
-
-  % \macroname[options](arrowdirection)[subscript][superscript]
+  % \macroname(arrowdirection)[subscript][superscript]
   \protected\expandafter\def\csname #2\endcsname{%
-    \@ifnextchar[%]
-      {\csname #2opt\endcsname}
-      {\csname #2opt\endcsname[]}%
-  }
-  \expandafter\def\csname #2opt\endcsname[##1]{%
     \@ifnextchar(%)
-      {\csname #2@i\endcsname[##1]}
-      {\csname #2@i\endcsname[##1]()}%
-  }
-  \expandafter\def\csname #2@i\endcsname[##1](##2){%
-    % figure out what the main character should be
-    \def\CMtemp{#3} % () --> no arrow
-    \ifstrequal{##2}{>}%
-      {\def\CMtemp{\csname Robject#2\endcsname[##1]{#3}}}% (>) --> right
-      {}%
-    \ifstrequal{##2}{<}
-      {\def\CMtemp{\csname Lobject#2\endcsname[##1]{#3}}}% (<) --> left
-      {}%
-    \ifstrequal{##2}{<>}%
-      {\def\CMtemp{\csname LRobject#2\endcsname[##1]{#3}}}% (<>) --> left,right
-      {}%
+      {\csname #2@i\endcsname}
+      {\csname #2@i\endcsname()}%
+  }%
+  % We need to do an \edef in order to lock-in the style.
+  \expandafter\edef\csname #2@i\endcsname(##1){%
+    % Freeze the accented character
     %
-    \@ifnextchar[%]
-      {\csname #2@ii\endcsname(\CMtemp)}
-      {\CMtemp}%                                   \cmdname
+    % http://tex.stackexchange.com/a/33826/6896
+    \noexpand\if\relax\noexpand\detokenize{##1}\relax%
+      \def\noexpand\CM@temp{\CM@symbol}%  % () --> no arrow
+    \noexpand\else%
+      \noexpand\ifstrequal{##1}{<}
+        {\def\noexpand\CM@vecdirection{L}}
+        {\noexpand\ifstrequal{##1}{>}
+          {\def\noexpand\CM@vecdirection{R}}
+          {\def\noexpand\CM@vecdirection{LR}}%
+        }%
+      \noexpand\makeCM@temp{\noexpand\CM@vecdirection object\CM@macroname}{\CM@vectorstyle}{\CM@symbol}%
+    \noexpand\fi%
+    \noexpand\@ifnextchar[%]
+      {\noexpand\csname \CM@macroname @ii\endcsname(\noexpand\CM@temp)}
+      {\noexpand\CM@temp}%                                   \cmdname
   }%
   % Now \CMtemp is ##1 and has the vector type already frozen
   \expandafter\def\csname #2@ii\endcsname(##1)[##2]{%
@@ -230,48 +276,78 @@
   }%
 }
 
-% \CMSuperIndexedSymbol{cmdname}{symbol}{superscript}
-\newcommand{\CMSuperIndexedSymbol}[4][harpoon]{%
-  \ifstrequal{#1}{arrow}
+% \CMSuperIndexedSymbol[vector type and style]{cmdname}{symbol}{superscript}
+\newcommand{\CMSuperIndexedSymbol}[4][xharpoon]{%
+  \pgfqkeys{/cmvector}{vectortype=xharpoon,style={}}
+  \pgfqkeys{/cmvector}{#1}
+  % Save arguments for use inside \edefs
+  \def\CM@macroname{#2}
+  \def\CM@symbol{#3}
+  \def\CM@superscript{#4}
+  % Default vectors.
+  \expandafter\let\csname Lobject#2\endcsname\CMxlharpoon
+  \expandafter\let\csname Robject#2\endcsname\CMxrharpoon
+  \expandafter\let\csname LRobject#2\endcsname\CMxlrharpoon
+  % http://tex.stackexchange.com/a/24924
+  \edef\CM@temp{{\CM@vectortype}}%
+  \expandafter\ifstrequal\CM@temp{arrow}
     {% Arrows
-      \expandafter\let\csname Lobject#2\endcsname\CMlarrow
-      \expandafter\let\csname Robject#2\endcsname\CMrarrow
-      \expandafter\let\csname LRobject#2\endcsname\CMlrarrow
-    }
-    {
-      \expandafter\let\csname Lobject#2\endcsname\CMlharpoon
-      \expandafter\let\csname Robject#2\endcsname\CMrharpoon
-      \expandafter\let\csname LRobject#2\endcsname\CMlrharpoon
-    }
+      \expandafter\let\csname Lobject#2\endcsname\CMlarrow%
+      \expandafter\let\csname Robject#2\endcsname\CMrarrow%
+      \expandafter\let\csname LRobject#2\endcsname\CMlrarrow%
+    }{}%
+  \expandafter\ifstrequal\CM@temp{harpoon}
+    {%
+      \expandafter\let\csname Lobject#2\endcsname\CMlharpoon%
+      \expandafter\let\csname Robject#2\endcsname\CMrharpoon%
+      \expandafter\let\csname LRobject#2\endcsname\CMlrharpoon%
+    }{}%
+  \expandafter\ifstrequal\CM@temp{xarrow}
+    {% Arrows
+      \expandafter\let\csname Lobject#2\endcsname\CMxlarrow%
+      \expandafter\let\csname Robject#2\endcsname\CMxrarrow%
+      \expandafter\let\csname LRobject#2\endcsname\CMxlrarrow%
+    }{}%
+  \expandafter\ifstrequal\CM@temp{xharpoon}
+    {%
+      \expandafter\let\csname Lobject#2\endcsname\CMxlharpoon%
+      \expandafter\let\csname Robject#2\endcsname\CMxrharpoon%
+      \expandafter\let\csname LRobject#2\endcsname\CMxlrharpoon%
+    }{}%
+  % \macroname(arrowdirection)[subscript][superscript]
   \protected\expandafter\def\csname #2\endcsname{%
     \@ifnextchar(%)
-      {\csname #2@i\endcsname}%
+      {\csname #2@i\endcsname}
       {\csname #2@i\endcsname()}%
   }%
-  \expandafter\def\csname #2@i\endcsname(##1){%
-    % figure out what the main character should be
-    \ifstrequal{##1}{>}%
-      {\def\CMtemp{\csname Robject#2\endcsname{#3}}}% (>) --> right
-      {% false
-        \ifstrequal{##1}{<}%
-          {\def\CMtemp{\csname Lobject#2\endcsname{#3}}}% (<) --> left
-          {%
-            \ifstrequal{##1}{<>}%
-              {\def\CMtemp{\csname LRobject#2\endcsname{#3}}}% (<>) --> left,right
-              {\def\CMtemp{#3}}% () or anything else --> regular
-          }%
-      }%
-    \@ifnextchar[%]
-      {\csname #2@ii\endcsname(\CMtemp)}%
-      {\CMtemp^{#4}}%                                   \cmdname
-  }%
+  % We need to do an \edef in order to lock-in the style.
+  \expandafter\edef\csname #2@i\endcsname(##1){%
+    % Freeze the accented character
+    %
+    % http://tex.stackexchange.com/a/33826/6896
+    \noexpand\if\relax\noexpand\detokenize{##1}\relax%
+      \def\noexpand\CM@temp{\CM@symbol}%  % () --> no arrow
+    \noexpand\else%
+      \noexpand\ifstrequal{##1}{<}
+        {\def\noexpand\CM@vecdirection{L}}
+        {\noexpand\ifstrequal{##1}{>}
+          {\def\noexpand\CM@vecdirection{R}}
+          {\def\noexpand\CM@vecdirection{LR}}%
+        }%
+      \noexpand\makeCM@temp{\noexpand\CM@vecdirection object\CM@macroname}{\CM@vectorstyle}{\CM@symbol}%
+    \noexpand\fi%
+    \noexpand\@ifnextchar[%]
+      {\noexpand\csname \CM@macroname @ii\endcsname(\noexpand\CM@temp)}
+      {\noexpand\CM@temp^{\CM@superscript}}%                                   \cmdname
+  }
+  % Now \CMtemp is ##1 and has the vector type already frozen
   \expandafter\def\csname #2@ii\endcsname(##1)[##2]{%
     \@ifnextchar[%]
-      {\csname #2@iii\endcsname({##1})[{##2}]}%
+      {\csname #2@iii\endcsname(##1)[##2]}%
       {##1_{##2}^{#4}}%                                  \cmdname[i]
   }%
   \expandafter\def\csname #2@iii\endcsname(##1)[##2][##3]{%
-    ##1_{##2\BEsep##3}^{#4}%                                        \cmdname[i][j]
+    ##1_{##2\BEsep##3}^{#4}%                             \cmdname[i][j]
   }%
 }
 
