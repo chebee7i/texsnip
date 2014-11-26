@@ -10,7 +10,6 @@
 % For extensible vectors
 \RequirePackage{accents}
 \RequirePackage{tikz}
-\usetikzlibrary{arrows.meta}
 \makeatletter
 \@ifpackagelater{tikz}{2013/12/01}{% 2013/12/20 is official release date
     \relax
@@ -18,6 +17,7 @@
     \PackageError{cmvec}{Package TikZ/PGF is too old. Needs version: 3.0.0}%
 }
 \makeatother
+\usetikzlibrary{arrows.meta}
 
 \def\showmeaning#1{\ttfamily\small\meaning#1}
 
