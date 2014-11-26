@@ -1,0 +1,20 @@
+% http://tex.stackexchange.com/a/28791/6896
+\newcommand{\dif}[1][]{\mathop{}\!\mathrm{d}
+  \if\relax\detokenize{#1}\relax
+  \else
+    ^{#1}\mkern-1.5mu
+  \fi}
+
+\ifcsname argmin\endcsname%
+  \relax
+\else%
+  \DeclareMathOperator*{\argmin}{argmin}
+\fi%
+
+\ifcsname argmax\endcsname%
+  \relax
+\else%
+  \DeclareMathOperator*{\argmax}{argmax}
+\fi%
+
+

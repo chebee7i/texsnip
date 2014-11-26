@@ -21,31 +21,12 @@
 
 \def\showmeaning#1{\ttfamily\small\meaning#1}
 
-% http://tex.stackexchange.com/a/28791/6896
-\newcommand{\dif}[1][]{\mathop{}\!\mathrm{d}
-  \if\relax\detokenize{#1}\relax
-  \else
-    ^{#1}\mkern-1.5mu
-  \fi}
-
 % Overline that accounts for italics.
 % http://tex.stackexchange.com/a/95084/6896
-\newcommand{\myoverline}[2][3]{{}\mkern#1mu\overline{\mkern-#1mu#2}}
-
-\ifcsname argmin\endcsname%
-  \relax
-\else%
-  \DeclareMathOperator*{\argmin}{argmin}
-\fi%
-
-\ifcsname argmax\endcsname%
-  \relax
-\else%
-  \DeclareMathOperator*{\argmax}{argmax}
-\fi%
+\providecommand{\myoverline}[2][3]{{}\mkern#1mu\overline{\mkern-#1mu#2}}
 
 % Useful for seeing how TeX does its spacing and alignment.
-\newcommand{\texbox}[1]{{\setlength{\fboxsep}{0pt}\fbox{#1}}}
+\providecommand{\texbox}[1]{{\setlength{\fboxsep}{0pt}\fbox{#1}}}
 
 % TUGboat, Volume 0 (2001), No. 0
 % http://math.arizona.edu/~aprl/publications/mathclap/perlis_mathclap_24Jun2003.pdf
@@ -120,11 +101,11 @@
 
 
 % http://tex.stackexchange.com/questions/207713/how-to-draw-a-left-right-harpoon-up
-\newcommand{\leftrightharpoonup}{%
+\providecommand{\leftrightharpoonup}{%
   \mathrel{\mathpalette\lrhup\relax}%
 }
 \makeatletter
-\newcommand{\lrhup}[2]{%
+\providecommand{\lrhup}[2]{%
   \ooalign{$\m@th#1\leftharpoonup$\cr$\m@th#1\rightharpoonup$\cr}%
 }
 \makeatother
