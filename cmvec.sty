@@ -28,6 +28,25 @@
 % Useful for seeing how TeX does its spacing and alignment.
 \providecommand{\texbox}[1]{{\setlength{\fboxsep}{0pt}\fbox{#1}}}
 
+% http://tex.stackexchange.com/a/28791/6896
+\newcommand{\dif}[1][]{\mathop{}\!\mathrm{d}
+  \if\relax\detokenize{#1}\relax
+  \else
+    ^{#1}\mkern-1.5mu
+  \fi}
+
+\ifcsname argmin\endcsname%
+  \relax
+\else%
+  \DeclareMathOperator*{\argmin}{argmin}
+\fi%
+
+\ifcsname argmax\endcsname%
+  \relax
+\else%
+  \DeclareMathOperator*{\argmax}{argmax}
+\fi%
+
 % TUGboat, Volume 0 (2001), No. 0
 % http://math.arizona.edu/~aprl/publications/mathclap/perlis_mathclap_24Jun2003.pdf
 % For comparison, here are the existing overlap macros:
